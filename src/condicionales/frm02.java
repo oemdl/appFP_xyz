@@ -4,18 +4,19 @@ import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class frm02 extends JFrame {
 	private static final long serialVersionUID = 1L;
-	JTextField txtVarones, txtMujeres;
-	JLabel lblPVarones, lblPMujeres;
+	JTextField txtUnidades;
+	JTextArea txaRpta;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -32,44 +33,35 @@ public class frm02 extends JFrame {
 
 	public frm02() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 300, 250);
+		setBounds(0, 0, 300, 420);
 		setLayout(null);
 		setLocationRelativeTo(null);
 
-		JLabel lblVarones = new JLabel("Varones :");
-		lblVarones.setBounds(50, 50, 80, 30);
-		getContentPane().add(lblVarones);
+		JLabel lblUnidades = new JLabel("Unidades :");
+		lblUnidades.setBounds(50, 50, 80, 30);
+		getContentPane().add(lblUnidades);
 
-		JLabel lblMujeres = new JLabel("Mujeres :");
-		lblMujeres.setBounds(50, 90, 80, 30);
-		getContentPane().add(lblMujeres);
+		txtUnidades = new JTextField();
+		txtUnidades.setBounds( 130, 50, 100, 30);
+		txtUnidades.setHorizontalAlignment( SwingConstants.RIGHT );
+		txtUnidades.setMargin( new Insets(5, 5, 5, 5) );
+		getContentPane().add(txtUnidades);
 
-		lblPVarones = new JLabel("%");
-		lblPVarones.setBounds(200, 50, 120, 30);
-		getContentPane().add(lblPVarones);
-
-		lblPMujeres = new JLabel("%");
-		lblPMujeres.setBounds(200, 90, 80, 30);
-		getContentPane().add(lblPMujeres);
-
-		txtVarones = new JTextField();
-		txtVarones.setBounds( 130, 50, 60, 30);
-		txtVarones.setHorizontalAlignment( SwingConstants.RIGHT );
-		txtVarones.setMargin( new Insets(5, 5, 5, 5) );
-		getContentPane().add(txtVarones);
-
-		txtMujeres = new JTextField();
-		txtMujeres.setBounds( 130, 90, 60, 30);
-		txtMujeres.setHorizontalAlignment( SwingConstants.RIGHT );
-		txtMujeres.setMargin( new Insets(5, 5, 5, 5) );
-		getContentPane().add(txtMujeres);
+		txaRpta = new JTextArea();
+		txaRpta.setFocusable(false);
+		txaRpta.setMargin( new Insets(5, 5, 5, 5) );
+		
+		JScrollPane scrollPane = new JScrollPane(txaRpta);
+		scrollPane.setBounds(50, 90, 200, 200);
+		getContentPane().add(scrollPane);
 
 		JButton btnCalcular = new JButton("Calcular");
-		btnCalcular.setBounds( 80, 150, 100, 30);
+		btnCalcular.setBounds( 80, 330, 100, 30);
 		btnCalcular.setMnemonic('a');
 		getContentPane().add(btnCalcular);
 
 		btnCalcular.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnCalcular_actionPerformed();
 			}
@@ -78,16 +70,29 @@ public class frm02 extends JFrame {
 	}
 
 	protected void btnCalcular_actionPerformed() {
-		int varones = Integer.parseInt( txtVarones.getText() );
-		int mujeres = Integer.parseInt( txtMujeres.getText() );
+		int unidades = Integer.parseInt( txtUnidades.getText() );
 
-		int total = varones + mujeres;
-		double pVarones = varones * 100.0 / total;
-		double pMujeres = mujeres * 100.0 / total;
+		int precio = 20 * unidades;
+		if ( unidades >= 26 && unidades <= 50 ) precio = 25;
+		else if ( unidades > 50 ) precio = 23;
+	
+		double compra = precio * unidades;
 
-		DecimalFormat df = new DecimalFormat( "####.##");
-		lblPVarones.setText( df.format( pVarones ) + " %" );
-		lblPMujeres.setText( df.format( pMujeres ) + " %" );
+		//double descuento = 0.16;
+		//if ( compra <= 500 ) descuento = 0.12;
+		//else if ( compra > 500 && compra <= 700 ) descuento = 0.14;
+		//descuento *= compra;
+
+		double descuento = compra * ( compra <= 500 ? 0.12 : compra > 700 ? 0.16 : 0.14 );
+		double total = compra - descuento;
+
+		int caramelos = unidades <= 50 ? 5 : unidades > 100 ? 15 : 10;
+
+		txaRpta.setText("");
+		txaRpta.append( String.format("Compra\tS/ %.2f\n", compra ) );
+		txaRpta.append( String.format("Descuento\tS/ %.2f\n", descuento ) );
+		txaRpta.append( String.format("Total \tS/ %.2f\n", total ) );
+		txaRpta.append( String.format("Caramelos \t%s", caramelos ) );
 	}
 
 }
