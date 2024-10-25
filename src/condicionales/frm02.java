@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class frm01 extends JFrame {
+public class frm02 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JTextField txtVarones, txtMujeres;
 	JLabel lblPVarones, lblPMujeres;
@@ -21,7 +21,7 @@ public class frm01 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frm01 frame = new frm01();
+					frm02 frame = new frm02();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,7 +30,7 @@ public class frm01 extends JFrame {
 		});
 	}
 
-	public frm01() {
+	public frm02() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 300, 250);
 		setLayout(null);
